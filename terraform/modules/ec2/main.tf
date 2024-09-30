@@ -11,7 +11,7 @@ resource "aws_instance" "public_ec2"{
     user_data =file("./modules/ec2/public_user_data.sh")
     provisioner "local-exec" {
       command = <<EOT
-      echo "[ec2] \n${self.public_ip}" >> inventory.ini
+      echo "[ec2] \n${self.public_ip}" > inventory.ini
       EOT
     }
  
@@ -64,12 +64,22 @@ resource "aws_key_pair" "kp" {
   public_key = tls_private_key.pk.public_key_openssh
 
  # Use a local-exec provisioner to save the private key to a file on the local machine
-provisioner "local-exec" { 
-    command = <<EOT
-echo '${tls_private_key.pk.private_key_pem}' > ./${var.key_Name}.pem
-chmod 400 ./${var.key_Name}.pem
-EOT
-  }
+# provisioner "local-exec" { 
+#     command = <<EOT
+# echo '${tls_private_key.pk.private_key_pem}' > ./${var.key_Name}.pem
+# chmod 400 ./${var.key_Name}.pem
+# EOT
+#   }
 
 }
 
+# Save the private key to a file locally (will be destroyed with the key_pair resource)
+resource "local_file" "private_key" {
+  content  = tls_private_key.pk.private_key_pem
+  filename = "${path.cwd}/${var.key_Name}.pem"
+  provisioner "local-exec" {
+    command = <<EOT
+    chmod 400 ${path.cwd}/${var.key_Name}.pem
+    EOT
+  }
+}
