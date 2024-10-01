@@ -1,0 +1,6 @@
+Environment-Setup/terraform/.terraform/
+Environment-Setup/terraform/.terraform.*
+Environment-Setup/terraform/terraform.*
+counting_App/my_venv/
+counting_App/*.log
+counting_App/.env

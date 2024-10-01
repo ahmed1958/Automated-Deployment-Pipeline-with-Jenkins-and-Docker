@@ -1,8 +1,0 @@
----
-- name: installing_Jenkins
-  hosts: ec2
-  user: ec2-user
-  become: true
-  roles:
-    - jenkins
-  
