@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'sekovv/countingapp'
+    }
+    stages {
+        stage('clone_repo') {
+            steps {
+                sh """
+                rm -rf Automated-Deployment-Pipeline-with-Jenkins-and-Docker
+                git clone https://github.com/ahmed1958/Automated-Deployment-Pipeline-with-Jenkins-and-Docker
+                """
+            }
+        }
+        stage('build image') {
+            steps {
+                sh """
+                cd Automated-Deployment-Pipeline-with-Jenkins-and-Docker/counting_App
+                docker build -t ${DOCKER_IMAGE} .
+                """
+            }
+        }
+         stage('push_image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker_hub_log', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')])
+                {sh """
+                echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                docker push ${DOCKER_IMAGE}
+                """}
+            }
+        }
+    }
+}
