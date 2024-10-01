@@ -4,6 +4,17 @@ pipeline {
         DOCKER_IMAGE = 'sekovv/countingapp'
     }
     stages {
+        stage('Check Trigger') {
+            steps {
+                script {
+                    if (env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
+                        echo "Triggered by GitHub webhook."
+                    } else {
+                        echo "Pipeline not triggered by a GitHub webhook."
+                    }
+                }
+            }
+        }
         stage('clone_repo') {
             steps {
                 sh """
