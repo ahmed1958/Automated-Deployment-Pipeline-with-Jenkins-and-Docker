@@ -1,105 +1,53 @@
-# TradeByte DevOps Challenge
+# Web Application for Automated Deployment
 
-This repository is meant to be used as a challenge for DevOps candidates at Tradebyte.
+This app is a Python-based web application that has been Dockerized as part of an automated deployment setup. The app increments a counter stored in Redis and displays the environment in which it is running.
 
-You should fork/clone this repository to use as a basis for the challenge.
+## Application Structure
+The web app is built using Tornado and Redis to store and manage a simple counter. It serves an HTML page that displays the environment and the counter value.
 
-## The challenge
+### Key Components:
+  - Tornado Framework: Used to handle web requests and serve the application.
+  - Redis: An in-memory data store used to manage a counter.
+  - Templates and Static Files: The HTML templates are in the templates/ folder, and static assets are in the static/ folder.
+## Updates
+### Changes Made:
+  - Dockerization: A Dockerfile was created to containerize both the app and Redis, simplifying deployment.
+  - Docker Compose: A docker-compose.yml file was added to manage and run the app and Redis containers together.
+  - Environment Variables: The app configuration no longer relies on a .env file. All necessary environment variables are directly set within the Dockerfile.
+These changes make the application easier to deploy and manage in a containerized environment.
+## Dockerfile Explanation
+The Dockerfile is a script that contains a series of instructions to build a Docker image for your web application. Here’s a breakdown of its components:
+  - Base Image: The FROM python:latest instruction sets the base image to the latest version of Python. This provides a pre-configured environment with Python installed.
+  - Working Directory: ```The WORKDIR /myapp``` instruction sets the working directory inside the container to /myapp. This is where all subsequent commands will be executed.
+  - Installing Dependencies: The ```RUN pip install tornado redis``` command installs the necessary Python packages, Tornado and Redis, which are required for the application to run.
+  - Copying Files: The ```COPY . .``` instruction copies all files from the current directory on your host machine into the /myapp directory in the container. This includes your application code and any necessary files.
+  - Environment Variables: The ENV instructions set various environment variables needed by the application. These include:
+    
+      - ```ENVIRONMENT```: Specifies the running environment (e.g., DEV).
+      - ```HOST```: Defines the hostname for the application.
+      - ```REDIS_HOST```: The hostname for the Redis server.
+      - ```REDIS_PORT```: The port for Redis communication.
+      - ```PORT```: The port on which the application will run.
+      - ```REDIS_DB```: Specifies which Redis database to use.
+  - Exposing Ports: The EXPOSE 8000 instruction informs Docker that the application will listen on port 8000, allowing external access to this port when the container is running.
+  - Command to Run the Application: The ```CMD [ "python" , "hello.py" ]``` instruction specifies the command that will be executed when the container starts. In this case, it runs the hello.py script, starting the Tornado web server.
+## Docker Compose File Explanation
+The Docker Compose file (docker-compose.yml) is used to define and run multi-container Docker applications. Here’s what it includes:
 
-Subject of this challenge is to setup a robust, production ready and developer friendly Continuous Deployment pipeline for the given demo application.
+1. Version: The version: "3" line specifies the version of the Docker Compose file format.
 
-The demo application can be found in this repository and the server for the deployment will be provided by us for you to work with.
+2. Services: This section defines the different services that make up the application.
 
-The requirements are as follows:
+    - my_app: This is the main application service. It includes:
 
-- Choose an appropriate CI/CD tool.
-- Use a container technology of your own choosing for the demo application.
-- Setup a continuous deployment pipeline for the containerized demo application with your chosen CI/CD tool.
-  - It should contain at least a testing and a deployment stage.
-  - It should only be deployed if the testing stage, which runs the demo applications tests, is successful.
-  - It should follow the [GitHub flow](https://guides.github.com/introduction/flow/) workflow for the deployment.
-  - It should be deployed to the provided demo server.
-- Setup a development environment which mirrors the production environment as closely as possible.
-- Think about scalability and performance.
+        - ```container_name```: Sets a custom name for the container.
+        - ```build```: Specifies the context and Dockerfile to use for building the image.
+        - ```ports```: Maps port 8000 on the host machine to port 8000 in the container, allowing external access to the application.
+        - ```depends_on```: Indicates that this service depends on the database service (Redis), ensuring that Redis starts before the application.
+    - database: This service represents the Redis database.
 
-## Demo application
-
-### Requirements
-
-#### System
-
-- GNU/Linux
-- `python` >= 3.7
-- `pip` >= 9.0
-- `redis` >= 5.0
-
-`>=` means any version of the package, above or equal to the specified version.
-
-#### Application
-
-- `redis-py`
-- `tornado`
-
-You can find them in the `requirements.txt` file and their required version number.
-You can install them by using:
-
-```bash
-pip install -r requirements.txt
-```
-
-### :rocket: Starting the Application
-
-The application uses several environment variables.
-You can find them all and their default values in the `.env` file. They need to be avaiable at runtime. Here is an overview about the environment variables:
-
-- `ENVIRONMENT` the environment in which the application is run. Likely `PROD` for production or `DEV` for development context.
-- `HOST` the hostname on which the application is running. Locally it is `localhost`.
-- `PORT` is the port on which the application is running.
-- `REDIS_HOST` is the hostname on which redis is running. Locally it is `localhost`.
-- `REDIS_PORT` is the port on which to communicate with redis. Normally it is `6379`.
-- `REDIS_DB` which redis db should be used. Normally it is `0`.
-
-Application can be found in `hello.py` file. You can start the application by using:
-
-```bash
-export $(cat .env | xargs) && python hello.py
-```
-
-Although you don't have to export the environment variables that way. :wink:
-
-### Static files
-
-- Static files are located in `static/` folder.
-- Templates are located in `template/` folder.
-
-### Executing Tests
-
-Tests can be found in `tests/test.py` file.
-You can run the tests by using:
-
-```bash
-python tests/test.py
-```
-
-## Contributing
-
-We love contributions from everyone. By participating in this project, you agree to abide by our [code of conduct](https://tradebyte.github.io/Code-of-Conduct/).
-
-We expect everyone to follow the code of conduct anywhere in `DevOps-Challenge`'s project codebases, issue trackers, chatrooms, and mailing lists.<br/>
-Thank you, [contributors]!
-
-[contributors]: https://github.com/tradebyte/DevOps-Challenge/graphs/contributors
+        - ```image```: Specifies the Docker image to use for Redis. By default, it pulls the official Redis image from Docker Hub.
 
 ## License
-
-Copyright (c) 2019 by the Tradebyte Software GmbH.<br/>
-`DevOps-Challenge` is free software, and may be redistributed under the terms specified in the [LICENSE] file.
-
-[license]: /LICENSE
-
-## About
-
-`DevOps-Challenge` is maintained and funded by the Tradebyte Software GmbH. <br/>
-The names and images for `DevOps-Challenge` are trademarks of the Tradebyte Software GmbH.
-
-We love free software!
+The app is originally provided by Tradebyte Software GmbH under the MIT License. You can find the full license in the LICENSE file located in the app folder.
+Copyright © 2019 Tradebyte Software GmbH, https://www.tradebyte.com/
