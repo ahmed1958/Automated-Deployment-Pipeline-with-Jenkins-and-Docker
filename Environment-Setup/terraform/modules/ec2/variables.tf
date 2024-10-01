@@ -5,7 +5,7 @@ variable "instance_type" {
 }
 variable "ec2_Name" {
   description = "The name assigned to the EC2 instance."
-  type = string
+  type = list(string)
 }
 
 variable "ami_id" {
@@ -29,6 +29,11 @@ variable "HTTP_port" {
   description = "The port used for HTTP traffic to the EC2 instance."
   type = number
   default = 80
+}
+variable "jenkins_port" {
+  description = "The port used for jenkins traffic to the EC2 instance."
+  type = number
+  default = 8080
 }
 
 variable "vpc_id" {

@@ -20,7 +20,7 @@ variable "availability_Zones_subnet" {
 
 variable "ec2_Name" {
     description = "Name of the EC2 instance."
-    type = string
+    type = list(string)
 }
 
 variable "ami_id" {

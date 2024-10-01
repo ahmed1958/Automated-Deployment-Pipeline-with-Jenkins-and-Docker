@@ -9,17 +9,22 @@ resource "aws_instance" "public_ec2"{
     key_name = aws_key_pair.kp.key_name #key pair attach
     associate_public_ip_address = "true"
     user_data =file("./modules/ec2/public_user_data.sh")
-    provisioner "local-exec" {
-      command = <<EOT
-      echo "[ec2] \n${self.public_ip}" > inventory.ini
-      EOT
-    }
- 
     tags = {
-        Name = "${var.ec2_Name}_public_ec2_${count.index + 1}",
+        Name = "${var.ec2_Name[count.index]}",
         created-by="Yousef Mohamed"
     }
-    
+     provisioner "local-exec" {
+    command = <<EOT
+    instance_name="${var.ec2_Name[count.index]}"
+    instance_ip="${self.public_ip}"
+
+    if [ "$instance_name" = "docker-agent" ]; then
+      echo "[docker-agent]\n$instance_ip" >> inventory.ini
+    elif [ "$instance_name" = "jenkins-agent" ]; then
+      echo "[jenkins-agent]\n$instance_ip" >> inventory.ini
+    fi
+    EOT
+  }
 }
 
 
@@ -40,6 +45,12 @@ resource "aws_security_group" "public_security-group" {
     ingress {
         from_port   = var.HTTP_port
         to_port     = var.HTTP_port
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    ingress {
+        from_port   = var.jenkins_port
+        to_port     = var.jenkins_port
         protocol    = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }

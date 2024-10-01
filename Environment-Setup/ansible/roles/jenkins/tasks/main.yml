@@ -1,0 +1,48 @@
+---
+# tasks file for roles/jenkines
+  - name: Update the system
+    apt:
+      update_cache: yes
+      force_apt_get: yes
+      cache_valid_time: 3600
+
+  - name: Install Java (Jenkins requires Java)
+    apt:
+      name: openjdk-11-jdk
+      state: present
+      
+  - name: add jenkins key 
+    apt_key:  # ansible module to add key
+      url:  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+      state: present 
+
+  - name: add jenkins repo 
+    apt_repository: #ansible module to add repo 
+      repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+      state: present 
+
+  - name: Update apt cache after adding Jenkins repo
+    apt:
+      update_cache: yes
+
+  - name: Install Jenkins
+    apt:
+      name: jenkins
+      state: present
+
+  - name: Start Jenkins service
+    systemd:
+      name: jenkins
+      state: started
+      enabled: yes
+
+  - name: Ensure Jenkins is running
+    service:
+      name: jenkins
+      state: started
+
+  - name: Open firewall for Jenkins port (8080)
+    ufw:
+      rule: allow
+      port: 8080
+      proto: tcp
