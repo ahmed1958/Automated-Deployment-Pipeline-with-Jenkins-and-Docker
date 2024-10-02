@@ -1,44 +1,45 @@
-pipeline {
-    agent any
-    environment {
-        DOCKER_IMAGE = 'sekovv/countingapp'
-    }
-    stages {
-        stage('Check Trigger') {
-            steps {
-                script {
-                    if (env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
-                        echo "Triggered by GitHub webhook."
-                    } else {
-                        echo "Pipeline not triggered by a GitHub webhook."
+    pipeline {
+        agent any
+        environment {
+            DOCKER_IMAGE = 'sekovv/countingapp'
+        }
+        stages {
+            stage('Check Trigger') {
+                steps {
+                    script {
+                        if (env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
+                            echo "Triggered by GitHub webhook."
+                        } else {
+                            echo "Pipeline not triggered by a GitHub webhook."
+                        }
                     }
                 }
             }
-        }
-        stage('clone_repo') {
+
+            stage('Clone Repo') {
             steps {
-                sh """
-                rm -rf Automated-Deployment-Pipeline-with-Jenkins-and-Docker
-                git clone https://github.com/ahmed1958/Automated-Deployment-Pipeline-with-Jenkins-and-Docker
-                """
+                git branch: 'main', url: 'https://github.com/ahmed1958/Automated-Deployment-Pipeline-with-Jenkins-and-Docker'
             }
-        }
-        stage('build image') {
+            }
+           stage('Build Image') {
             steps {
-                sh """
-                cd Automated-Deployment-Pipeline-with-Jenkins-and-Docker/counting_App
-                docker build -t ${DOCKER_IMAGE} .
-                """
+                script {
+                    docker.build(DOCKER_IMAGE, 'counting_App')
+                }
             }
-        }
-         stage('push_image') {
+           }
+
+            stage('Push Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker_hub_log', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')])
-                {sh """
-                echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                docker push ${DOCKER_IMAGE}
-                """}
+                script {
+                    // Use the correct registry URL
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker_hub_log') {
+                        // Ensure that DOCKER_IMAGE includes the tag
+                        docker.image(DOCKER_IMAGE).push() // Specify a tag if needed
+                    }
+                }
             }
-        }
+            }
+   
     }
 }
