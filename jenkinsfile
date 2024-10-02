@@ -55,4 +55,5 @@
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Failed",
                  body: "The job failed. Check details: ${env.BUILD_URL}"
         }
+    }
 }
