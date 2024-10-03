@@ -60,3 +60,5 @@ class TestMainHandler(tornado.testing.AsyncHTTPTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+### to run use  python -m unittest test_hello.py
