@@ -4,7 +4,6 @@ import tornado.ioloop
 import tornado.web
 import logging
 import os
-from sys import exit
 import sys
 
 try:
@@ -16,7 +15,7 @@ try:
     r.set("counter", 0)
 except ConnectionError:
     print("Redis server isn't running. Exiting...")
-    exit()
+    sys.exit(1)
 
 environment = os.getenv("ENVIRONMENT")
 port = int(os.getenv("PORT"))
