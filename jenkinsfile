@@ -42,4 +42,18 @@
             }
    
     }
+    post {
+        success {
+            // Use the Mailer plugin to send email on success
+            mail to: 'ahmedsayeda829@gmail.com',
+                 subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Success",
+                 body: "The job succeeded. Check details: ${env.BUILD_URL}"
+        }
+        failure {
+            // Use the Mailer plugin to send email on failure
+            mail to: 'ahmedsayeda829@gmail.com',
+                 subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Failed",
+                 body: "The job failed. Check details: ${env.BUILD_URL}"
+        }
+    }
 }
