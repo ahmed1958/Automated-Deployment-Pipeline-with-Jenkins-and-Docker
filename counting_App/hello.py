@@ -16,7 +16,7 @@ try:
 except ConnectionError:
     print("Redis server isn't running. Exiting...")
     sys.exit(1)
-
+################################################################
 environment = os.getenv("ENVIRONMENT")
 port = int(os.getenv("PORT"))
 
