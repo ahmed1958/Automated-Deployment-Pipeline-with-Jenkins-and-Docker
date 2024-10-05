@@ -41,17 +41,17 @@
             }
            }
 
-            // stage('Push Image') {
-            // steps {
-            //     script {
-            //         // Use the correct registry URL
-            //         docker.withRegistry('https://index.docker.io/v1/', 'docker_hub_log') {
-            //             // Ensure that DOCKER_IMAGE includes the tag
-            //             docker.image(DOCKER_IMAGE).push() // Specify a tag if needed
-            //         }
-            //     }
-            // }
-            // }
+            stage('Push Image') {
+            steps {
+                script {
+                    // Use the correct registry URL
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker_hub_log') {
+                        // Ensure that DOCKER_IMAGE includes the tag
+                        docker.image(DOCKER_IMAGE).push() // Specify a tag if needed
+                    }
+                }
+            }
+            }
             stage('Trigger Other Pipeline') {
             steps {
                 script {

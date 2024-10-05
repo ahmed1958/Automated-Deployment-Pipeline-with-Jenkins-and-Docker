@@ -115,7 +115,7 @@ class TestMainHandler(tornado.testing.AsyncHTTPTestCase):
 
         # Set environment variables
         os.environ['ENVIRONMENT'] = 'DEV'
-        os.environ['REDIS_HOST'] = 'localhost'
+        os.environ['REDIS_HOST'] = 'database'
         os.environ['REDIS_PORT'] = '6379'
         os.environ['REDIS_DB'] = '0'
 
@@ -131,7 +131,7 @@ class TestRedisConnection(unittest.TestCase):
         mock_redis.return_value = mock_redis_instance
 
         # Set environment variables
-        os.environ['REDIS_HOST'] = 'localhost'
+        os.environ['REDIS_HOST'] = 'database'
         os.environ['REDIS_PORT'] = '6379'
         os.environ['REDIS_DB'] = '0'
 
@@ -158,7 +158,7 @@ class TestRedisConnection(unittest.TestCase):
         mock_redis.side_effect = redis.exceptions.ConnectionError
 
         # Set environment variables
-        os.environ['REDIS_HOST'] = 'localhost'
+        os.environ['REDIS_HOST'] = 'database'
         os.environ['REDIS_PORT'] = '6379'
         os.environ['REDIS_DB'] = '0'
 
