@@ -1,0 +1,7 @@
+---
+- name: Deploying_app
+  hosts: local
+  user: ubuntu
+  become: true
+  roles:
+    - deploy_role
