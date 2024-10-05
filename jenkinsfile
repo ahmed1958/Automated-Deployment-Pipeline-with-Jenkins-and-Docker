@@ -32,12 +32,11 @@
             steps {
                 script {
                     // You can define your tests here, for example, running a container to test the application
-                    docker.image(DOCKER_IMAGE).inside {
                         sh 'echo "Running tests..."'
                         sh 'docker-compose up -d'
                         sh 'docker exec my_app_container python -m unittest test_hello.py'
                         sh 'docker-compose down'
-                    }
+
                 }
             }
            }
