@@ -41,29 +41,42 @@
             }
            }
 
-            stage('Push Image') {
+            // stage('Push Image') {
+            // steps {
+            //     script {
+            //         // Use the correct registry URL
+            //         docker.withRegistry('https://index.docker.io/v1/', 'docker_hub_log') {
+            //             // Ensure that DOCKER_IMAGE includes the tag
+            //             docker.image(DOCKER_IMAGE).push() // Specify a tag if needed
+            //         }
+            //     }
+            // }
+            // }
+            stage('Trigger Other Pipeline') {
             steps {
                 script {
-                    // Use the correct registry URL
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker_hub_log') {
-                        // Ensure that DOCKER_IMAGE includes the tag
-                        docker.image(DOCKER_IMAGE).push() // Specify a tag if needed
-                    }
+                    // Trigger another pipeline and pass the variable
+                    def result = build job: 'deploy_test', 
+                                      parameters: [
+                                          string(name: 'DOCKER_IMAGE', value: DOCKER_IMAGE),
+                                          string(name: 'BUILD_NUMBER', value: env.BUILD_NUMBER)
+                                      ]
+                    echo "Triggered other pipeline with result: ${result}"
                 }
             }
-            }
+        }
    
     }
     post {
         success {
             // Use the Mailer plugin to send email on success
-            mail to: 'youasf5678@gmail.com',
+            mail to: 'youasf678@gmail.com',
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Success",
                  body: "The job succeeded. Check details: ${env.BUILD_URL}"
         }
         failure {
             // Use the Mailer plugin to send email on failure
-            mail to: 'youasf5678@gmail.com',
+            mail to: 'youasf678@gmail.com',
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Failed",
                  body: "The job failed. Check details: ${env.BUILD_URL}"
         }
