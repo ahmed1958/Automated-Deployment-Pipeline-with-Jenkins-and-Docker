@@ -24,7 +24,7 @@
            stage('Build Image') {
             steps {
                 script {
-                    sh 'cd counting_App && docker-compose build'
+                    sh 'cd counting_App && docker-compose build ${DOCKER_IMAGE}'
                 }
             }
            }
