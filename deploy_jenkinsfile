@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'sekovv/countingapp:latest'
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ahmed1958/Automated-Deployment-Pipeline-with-Jenkins-and-Docker'
+            }
+        }
+        stage('Deploy the App') {
+            steps {
+                script {
+                    // Navigate to app_deployment directory and run Ansible Playbook
+                    dir('app_deployment') {
+                        ansiblePlaybook(
+                            playbook: 'deploy_playbook.yml',                // Path to your playbook
+                            extras: '-e "image_name=${DOCKER_IMAGE} ENV_VAR=DEPLOY"'       // Pass environment variable to Ansible
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

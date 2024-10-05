@@ -1,7 +1,7 @@
     pipeline {
         agent any
         environment {
-            DOCKER_IMAGE = 'sekovv/countingapp'
+            DOCKER_IMAGE = 'sekovv/countingapp:latest'
         }
         stages {
             stage('Check Trigger') {
@@ -36,6 +36,7 @@
                         sh 'cd counting_App && docker-compose up -d'
                         sh 'cd counting_App && docker exec my_app_container python -m unittest test_hello.py'
                         sh 'cd counting_App && docker-compose down'
+                        sh 'docker image rm '
 
                 }
             }
