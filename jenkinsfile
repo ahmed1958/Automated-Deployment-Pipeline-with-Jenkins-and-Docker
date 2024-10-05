@@ -28,6 +28,18 @@
                 }
             }
            }
+           stage('Test Image') {
+            steps {
+                script {
+                    // You can define your tests here, for example, running a container to test the application
+                        sh 'echo "Running tests..."'
+                        sh 'cd counting_App && docker-compose up -d'
+                        sh 'cd counting_App && docker exec my_app_container python -m unittest test_hello.py'
+                        sh 'cd counting_App && docker-compose down'
+
+                }
+            }
+           }
 
             stage('Push Image') {
             steps {
@@ -45,13 +57,13 @@
     post {
         success {
             // Use the Mailer plugin to send email on success
-            mail to: 'ahmedsayeda829@gmail.com',
+            mail to: 'youasf5678@gmail.com',
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Success",
                  body: "The job succeeded. Check details: ${env.BUILD_URL}"
         }
         failure {
             // Use the Mailer plugin to send email on failure
-            mail to: 'ahmedsayeda829@gmail.com',
+            mail to: 'youasf5678@gmail.com',
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Failed",
                  body: "The job failed. Check details: ${env.BUILD_URL}"
         }
