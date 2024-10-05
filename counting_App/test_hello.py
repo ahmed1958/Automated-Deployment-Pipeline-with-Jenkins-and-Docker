@@ -147,7 +147,7 @@ class TestRedisConnection(unittest.TestCase):
             self.fail("Redis connection failed unexpectedly")
 
         mock_redis.assert_called_once_with(
-            host='localhost',
+            host='database',
             port=6379,
             db=0
         )
