@@ -33,7 +33,7 @@
                 script {
                     // You can define your tests here, for example, running a container to test the application
                         sh 'echo "Running tests..."'
-                        sh 'cd counting_App && docker-compose up -d'
+                        sh 'cd counting_App && docker-compose up -d --build my_app '
                         sh 'cd counting_App && docker exec my_app_container python -m unittest test_hello.py'
                         sh 'cd counting_App && docker-compose down'
 
