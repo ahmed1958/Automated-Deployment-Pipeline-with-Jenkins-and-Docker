@@ -24,7 +24,7 @@
            stage('Build Image') {
             steps {
                 script {
-                    sh 'cd counting_App && docker-compose build'
+                    docker.build(DOCKER_IMAGE, 'counting_App')
                 }
             }
            }
