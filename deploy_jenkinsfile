@@ -16,7 +16,7 @@ pipeline {
                     dir('app_deployment') {
                         ansiblePlaybook(
                             playbook: 'deploy_playbook.yml',                // Path to your playbook
-                            extras: '-e "image_name=${DOCKER_IMAGE}"'       // Pass environment variable to Ansible
+                            extras: '-e "image_name=${DOCKER_IMAGE} ENV_VAR=DEPLOY"'       // Pass environment variable to Ansible
                         )
                     }
                 }
