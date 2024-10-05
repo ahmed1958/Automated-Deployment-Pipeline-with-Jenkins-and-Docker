@@ -23,15 +23,26 @@ port = int(os.getenv("PORT"))
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
+        # Get the current counter value without incrementing
+        counter_value = r.get("counter")
+        # Check if counter_value is None; if so, set it to 0, otherwise convert to int
+        counter_value = 0 if counter_value is None else int(counter_value)
         self.render(
             "index.html",
-            dict={"environment": environment, "counter": r.incr("counter", 1)},
+            dict={"environment": environment, "counter": counter_value},
         )
 
+class ClickHandler(tornado.web.RequestHandler):
+    def post(self):
+        r.incr("counter", 1)  # Increment the counter in Redis
+        self.redirect("/")  # Redirect back to the main page
 
 class Application(tornado.web.Application):
     def __init__(self):
-        handlers = [(r"/", MainHandler)]
+        handlers = [
+            (r"/", MainHandler),  # Main page route
+            (r"/click", ClickHandler),  # Route to handle button clicks
+        ]
         settings = {
             "template_path": os.path.join(
                 os.path.dirname(os.path.abspath(__file__)), "templates"

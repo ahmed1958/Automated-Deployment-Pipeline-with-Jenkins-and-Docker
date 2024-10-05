@@ -21,7 +21,10 @@
       <p><span class="counter">Counter:</span> {{ dict["counter"] }}</p>
     </div>
     <div>
-      <button type="button" onClick="window.location.reload()">Reload</button>
+      <form action="/click" method="post">
+        <button type="submit">Reload</button>
+      </form>
     </div>
   </body>
 </html>
+
