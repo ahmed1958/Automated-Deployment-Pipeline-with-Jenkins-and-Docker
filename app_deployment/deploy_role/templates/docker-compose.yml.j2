@@ -10,4 +10,5 @@ services:
     depends_on:
       - database
   database:
-    image: redis_{{ENV_VAR}}
+    container_name: redis_{{ENV_VAR}}
+    image: redis

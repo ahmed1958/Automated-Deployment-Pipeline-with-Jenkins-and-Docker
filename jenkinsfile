@@ -1,7 +1,7 @@
     pipeline {
-        agent any
+        agent { label 'docker' }
         environment {
-            DOCKER_IMAGE = 'sekovv/countingapp:latest'
+            DOCKER_IMAGE = 'sekovv/countingapp:v1'
         }
         stages {
             stage('Check Trigger') {
@@ -70,13 +70,13 @@
     post {
         success {
             // Use the Mailer plugin to send email on success
-            mail to: 'youasf678@gmail.com',
+            mail to: 'ahmedsayeda829@gmail.com',
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Success",
                  body: "The job succeeded. Check details: ${env.BUILD_URL}"
         }
         failure {
             // Use the Mailer plugin to send email on failure
-            mail to: 'youasf678@gmail.com',
+            mail to: 'ahmedsayeda829@gmail.com',
                  subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Failed",
                  body: "The job failed. Check details: ${env.BUILD_URL}"
         }

@@ -19,7 +19,7 @@ resource "aws_instance" "public_ec2"{
     instance_ip="${self.public_ip}"
 
     if [ "$instance_name" = "docker-agent" ]; then
-      echo "[docker-agent]\n$instance_ip" >> inventory.ini
+      echo "[docker-agent]\n$instance_ip" > inventory.ini
     elif [ "$instance_name" = "jenkins-agent" ]; then
       echo "[jenkins-agent]\n$instance_ip" >> inventory.ini
     fi

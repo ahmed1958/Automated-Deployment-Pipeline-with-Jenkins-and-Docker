@@ -10,4 +10,5 @@ services:
     depends_on:
       - database
   database:
-    image: redis_test
+    container_name: redis_test
+    image: redis
