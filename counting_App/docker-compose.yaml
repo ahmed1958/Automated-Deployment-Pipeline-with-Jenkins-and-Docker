@@ -6,7 +6,7 @@ services:
       context: ./
       dockerfile: dockerfile
     ports:
-      - 8000:8000
+      - 6000:8000
     depends_on:
       - database
   database:
