@@ -52,5 +52,5 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     app = Application()
     app.listen(port)
-    logger.info(f"App running: http://{os.getenv('HOST')}:{int(os.getenv('PORT'))}")
+    # logger.info(f"App running: http://{os.getenv('HOST')}:{int(os.getenv('PORT'))}")
     tornado.ioloop.IOLoop.current().start()

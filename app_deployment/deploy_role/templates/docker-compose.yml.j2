@@ -4,7 +4,8 @@ services:
     container_name: my_app_container_{{ENV_VAR}}
     image: {{ image_name }}
     environment:
-      ENVIRONMENT: {{ENV_VAR}}
+      - ENVIRONMENT: {{ENV_VAR}}
+      - PORT: 8000
     ports:
       - 8000:8000
     depends_on:
