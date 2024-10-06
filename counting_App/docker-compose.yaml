@@ -10,4 +10,4 @@ services:
     depends_on:
       - database
   database:
-    image: redis_test
+    image: redis
