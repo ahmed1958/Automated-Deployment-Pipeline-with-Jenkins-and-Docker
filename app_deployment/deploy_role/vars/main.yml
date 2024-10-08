@@ -1,0 +1,4 @@
+---
+# vars file for deploy_role
+image_name: sekovv/countingapp
+ENV_VAR: DEPLOY

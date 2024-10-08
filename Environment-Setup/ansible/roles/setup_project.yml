@@ -1,0 +1,15 @@
+---
+- name: installing_Jenkins
+  hosts: jenkins-agent
+  user: ubuntu
+  become: true
+  roles:
+    - jenkins
+  
+- name: Ansible and Docker Installation
+  hosts: docker-agent
+  user: ubuntu  # Since it's an Ubuntu-based EC2 instance
+  become: true  # To run the command as root/superuser
+  roles:
+    - ansible
+    - docker

@@ -1,0 +1,84 @@
+    pipeline {
+        agent { label 'docker' }
+        environment {
+            DOCKER_IMAGE = 'sekovv/countingapp:v1'
+        }
+        stages {
+            stage('Check Trigger') {
+                steps {
+                    script {
+                        if (env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
+                            echo "Triggered by GitHub webhook."
+                        } else {
+                            echo "Pipeline not triggered by a GitHub webhook."
+                        }
+                    }
+                }
+            }
+
+            stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ahmed1958/Automated-Deployment-Pipeline-with-Jenkins-and-Docker'
+            }
+            }
+           stage('Build Image') {
+            steps {
+                script {
+                    docker.build(DOCKER_IMAGE, 'counting_App')
+                }
+            }
+           }
+           stage('Test Image') {
+            steps {
+                script {
+                    // You can define your tests here, for example, running a container to test the application
+                        sh 'echo "Running tests..."'
+                        sh 'cd counting_App && docker-compose up -d --build my_app_test '
+                        sh 'cd counting_App && docker exec my_app_container_test python -m unittest test_hello.py'
+                        sh 'cd counting_App && docker-compose down'
+
+                }
+            }
+           }
+
+            stage('Push Image') {
+            steps {
+                script {
+                    // Use the correct registry URL
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker_hub_log') {
+                        // Ensure that DOCKER_IMAGE includes the tag
+                        docker.image(DOCKER_IMAGE).push() // Specify a tag if needed
+                    }
+                }
+            }
+            }
+            stage('Trigger Other Pipeline') {
+            steps {
+                script {
+                    // Trigger another pipeline and pass the variable
+                    def result = build job: 'deploy_test', 
+                                      parameters: [
+                                          string(name: 'DOCKER_IMAGE', value: DOCKER_IMAGE),
+                                          string(name: 'BUILD_NUMBER', value: env.BUILD_NUMBER)
+                                      ]
+                    echo "Triggered other pipeline with result: ${result}"
+                }
+            }
+        }
+   
+    }
+    post {
+        success {
+            // Use the Mailer plugin to send email on success
+            mail to: 'ahmedsayeda829@gmail.com',
+                 subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Success",
+                 body: "The job succeeded. Check details: ${env.BUILD_URL}"
+        }
+        failure {
+            // Use the Mailer plugin to send email on failure
+            mail to: 'ahmedsayeda829@gmail.com',
+                 subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' - Failed",
+                 body: "The job failed. Check details: ${env.BUILD_URL}"
+        }
+    }
+}

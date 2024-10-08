@@ -1,0 +1,22 @@
+---
+# tasks file for deploy_role
+- name: Check if docker-compose file exists
+  stat:
+    path: /docker-compose.yml  # Change this to your actual path
+  register: compose_file
+
+- name: Bring down existing containers
+  community.docker.docker_compose:
+      project_src: /  # Point to the directory containing docker-compose.yml
+      state: absent  # This will stop and remove the containers
+  when: compose_file.stat.exists  # Run this only if the compose file exists
+  
+- name: Render Docker Compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /docker-compose.yml 
+
+- name: Run docker-compose up handler
+  community.docker.docker_compose:
+    project_src: /  
+    build: true

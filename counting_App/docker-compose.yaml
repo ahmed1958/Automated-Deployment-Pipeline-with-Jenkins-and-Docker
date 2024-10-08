@@ -1,0 +1,16 @@
+version: "3"
+services:
+  my_app_test:
+    container_name: my_app_container_test
+    build:
+      context: ./
+      dockerfile: dockerfile
+    ports:
+      - 6000:8000
+    environment:
+      - PORT=6000
+    depends_on:
+      - database
+  database:
+    container_name: redis_test
+    image: redis
