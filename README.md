@@ -53,7 +53,10 @@ Jenkins runs unit tests to ensure that the new code does not break the applicati
 
 Throughout the pipeline, Jenkins is configured to send notifications about the pipeline status (successful build, failed tests, deployment status) via email.
 
+
+
 ---
+
 
 
 
