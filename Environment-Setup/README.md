@@ -6,6 +6,9 @@ This project automates the deployment of two EC2 instances in AWS, each running 
   - Docker Agent: Installed on one EC2 instance to run Docker.
   - Jenkins Agent: Installed on a separate EC2 instance to run Jenkins.
 Terraform is used to provision the necessary AWS infrastructure, including EC2 instances, security groups, and key pairs. Ansible is used to install and configure Docker and Jenkins on the respective EC2 instances.
+<p align="center">
+  <img src="terraform-infra.png" alt="infra">
+</p>
 
 ## Prerequisites
 Before running this setup, ensure the following tools are installed:
