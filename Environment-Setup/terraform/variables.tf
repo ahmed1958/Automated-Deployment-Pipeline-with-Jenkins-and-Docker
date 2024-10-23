@@ -28,9 +28,9 @@ variable "ami_id" {
     type = string
 }
 
-variable "instance_type" {
+variable "instance_types" {
     description = "Type of EC2 instance."
-    type = string
+    type = list(string)
 }
 
 variable "key_Name" {
