@@ -1,6 +1,6 @@
 variable "instance_type" {
   description = "Specifies the type of EC2 instance to be launched."
-  type = string
+  type = list(string)
   
 }
 variable "ec2_Name" {

@@ -7,4 +7,4 @@
   ec2_Name = ["docker-agent","jenkins-agent"]
   ami_id = "ami-0e86e20dae9224db8"   # ami-0e86e20dae9224db8
   key_Name = "private_key"
-  instance_type = "t2.micro"   # t2.micro
+  instance_types = ["t2.micro","t2.micro"]  # t2.micro

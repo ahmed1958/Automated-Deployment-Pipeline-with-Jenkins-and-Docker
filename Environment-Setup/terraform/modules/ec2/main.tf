@@ -3,7 +3,7 @@
 resource "aws_instance" "public_ec2"{
     count =length(var.public_subnet_ids) 
     ami = var.ami_id
-    instance_type = var.instance_type
+    instance_type = var.instance_type[count.index]
     subnet_id = var.public_subnet_ids[count.index]
     vpc_security_group_ids = [aws_security_group.public_security-group.id]
     key_name = aws_key_pair.kp.key_name #key pair attach
